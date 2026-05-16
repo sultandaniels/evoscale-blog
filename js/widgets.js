@@ -773,7 +773,7 @@
   // ---- Visual #5b: candidates-vs-time ----
   function CandVsTimeEditable() {
     var rows = [
-      { id: 1, k: 1, candidates: 14, time: 90, notes: "Estimated (K=8 / 8)" },
+      { id: 1, k: 1, candidates: 48.67, time: 90, notes: "Circle packing" },
       { id: 2, k: 4, candidates: 84, time: 90, notes: "Circle packing" },
       { id: 3, k: 8, candidates: 112, time: 90, notes: "Circle packing" },
     ];
@@ -840,8 +840,8 @@
         </div>
         <div className="chart-readout">
           Each line runs from (0, 0) to that row's (time, candidates) endpoint;
-          the slope is throughput. K=4 and K=8 are circle-packing measurements at
-          t=90 min, K=1 is estimated from the 8${'×'} candidate ratio.
+          the slope is throughput. K=1, K=4, and K=8 are circle-packing
+          measurements (3-run means) at t=90 min.
         </div>
       </div>
     `;
