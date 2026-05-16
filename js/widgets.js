@@ -771,10 +771,11 @@
   }
 
   // ---- Visual #5b: candidates-vs-time ----
-  // Values sourced from assets/k_sweep_candidates_raw.json (checkpoints_sec
-  // indices 0–7). Runs with trailing nulls are forward-filled with each run's
-  // last observed value, matching ResultsChart's treatment of incomplete runs.
+  // Mean and std taken directly from assets/k_sweep_candidates_raw.json
+  // (circle_packing / signal_processing, all 9 checkpoints_sec entries).
   // For each K, lo = mean - std, band = 2 * std (Recharts stacked-area pattern).
+  // Where the JSON mean/std is null (k8 signal_processing at t=120), the field
+  // is null so Recharts renders a gap.
   var CAND_VS_TIME_DATA = {
     "Circle Packing": [
       { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
@@ -785,6 +786,7 @@
       { t: 75, k1: 40.33, k1_lo: 36.93, k1_band: 6.8, k2: 46.67, k2_lo: 41.68, k2_band: 9.98, k4: 66.67, k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56, k8_band: 7.54 },
       { t: 90, k1: 48.67, k1_lo: 45.37, k1_band: 6.6, k2: 52.67, k2_lo: 47.68, k2_band: 9.98, k4: 84.0, k4_lo: 77.47, k4_band: 13.06, k8: 112.0, k8_lo: 112.0, k8_band: 0.0 },
       { t: 105, k1: 56.0, k1_lo: 52.44, k1_band: 7.12, k2: 64.0, k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9, k8_band: 7.54 },
+      { t: 120, k1: 61.33, k1_lo: 59.63, k1_band: 3.4, k2: 77.33, k2_lo: 67.9, k2_band: 18.86, k4: 169.33, k4_lo: 87.66, k4_band: 163.34, k8: 146.67, k8_lo: 142.9, k8_band: 7.54 },
     ],
     "Signal Processing": [
       { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
@@ -793,8 +795,9 @@
       { t: 45, k1: 76.0, k1_lo: 52.15, k1_band: 47.7, k2: 90.67, k2_lo: 81.68, k2_band: 17.98, k4: 181.33, k4_lo: 151.16, k4_band: 60.34, k8: 461.33, k8_lo: 297.99, k8_band: 326.68 },
       { t: 60, k1: 115.0, k1_lo: 73.96, k1_band: 82.08, k2: 114.67, k2_lo: 99.59, k2_band: 30.16, k4: 272.0, k4_lo: 187.15, k4_band: 169.7, k8: 696.0, k8_lo: 446.76, k8_band: 498.48 },
       { t: 75, k1: 150.0, k1_lo: 102.42, k1_band: 95.16, k2: 144.0, k2_lo: 128.42, k2_band: 31.16, k4: 357.33, k4_lo: 214.02, k4_band: 286.62, k8: 952.0, k8_lo: 589.9, k8_band: 724.2 },
-      { t: 90, k1: 165.67, k1_lo: 120.6, k1_band: 90.14, k2: 173.33, k2_lo: 152.27, k2_band: 42.12, k4: 446.67, k4_lo: 247.68, k4_band: 397.98, k8: 1205.33, k8_lo: 726.34, k8_band: 957.98 },
-      { t: 105, k1: 171.0, k1_lo: 133.47, k1_band: 75.06, k2: 196.67, k2_lo: 173.73, k2_band: 45.88, k4: 509.33, k4_lo: 303.77, k4_band: 411.12, k8: 1242.67, k8_lo: 816.47, k8_band: 852.4 },
+      { t: 90, k1: 148.5, k1_lo: 102.0, k1_band: 93.0, k2: 173.33, k2_lo: 152.27, k2_band: 42.12, k4: 446.67, k4_lo: 247.68, k4_band: 397.98, k8: 1205.33, k8_lo: 726.34, k8_band: 957.98 },
+      { t: 105, k1: 118.0, k1_lo: 118.0, k1_band: 0.0, k2: 196.67, k2_lo: 173.73, k2_band: 45.88, k4: 509.33, k4_lo: 303.77, k4_band: 411.12, k8: 640.0, k8_lo: 640.0, k8_band: 0.0 },
+      { t: 120, k1: 138.0, k1_lo: 138.0, k1_band: 0.0, k2: 226.67, k2_lo: 202.1, k2_band: 49.14, k4: 416.0, k4_lo: 412.0, k4_band: 8.0, k8: null, k8_lo: null, k8_band: null },
     ],
   };
 
@@ -812,7 +815,7 @@
     var isCP = bench === "Circle Packing";
     var readout = isCP
       ? "Cumulative candidates generated on the circle-packing benchmark, mean ±1σ over 3 runs. Higher K generates more candidates per wall-clock minute until saturation around 90 min."
-      : "Cumulative candidates generated on the signal-processing benchmark, mean ±1σ over 3 runs. K=8 produces roughly 7× more candidates than K=1 by t=90 min; wide bands reflect high seed-to-seed variance, with some runs forward-filled after their final checkpoint.";
+      : "Cumulative candidates generated on the signal-processing benchmark, mean ±1σ over 3 runs. K=8 produces roughly 7× more candidates than K=1 by t=90 min; wide bands reflect high seed-to-seed variance, and means past t=75 average over only the runs still reporting at each checkpoint.";
 
     function customTooltip(props) {
       if (!props.active || !props.payload || !props.payload.length) return null;
@@ -851,8 +854,8 @@
               <${XAxis}
                 dataKey="t"
                 type="number"
-                domain=${[0, 105]}
-                ticks=${[0, 15, 30, 45, 60, 75, 90, 105]}
+                domain=${[0, 120]}
+                ticks=${[0, 15, 30, 45, 60, 75, 90, 105, 120]}
                 tick=${{ fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" }}
                 label=${{
         value: "Wall-clock time (minutes)",
