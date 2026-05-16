@@ -292,7 +292,7 @@
         value: "Best score",
         angle: -90,
         position: "insideLeft",
-        offset: 20,
+        offset: 0,
         style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
       }}
               />
@@ -775,14 +775,14 @@
   // assets/k_sweep_candidates_raw.json (checkpoints_sec indices 0–7).
   // For each K, lo = mean - std, band = 2 * std (Recharts stacked-area pattern).
   var CAND_VS_TIME_DATA = [
-    { t: 0,   k1: 0.0,   k1_lo: 0.0,   k1_band: 0.0,  k2: 0.0,   k2_lo: 0.0,   k2_band: 0.0,   k4: 0.0,    k4_lo: 0.0,   k4_band: 0.0,   k8: 0.0,    k8_lo: 0.0,    k8_band: 0.0  },
-    { t: 15,  k1: 17.0,  k1_lo: 15.37, k1_band: 3.26, k2: 22.0,  k2_lo: 17.68, k2_band: 8.64,  k4: 24.0,   k4_lo: 18.34, k4_band: 11.32, k8: 40.0,   k8_lo: 33.47,  k8_band: 13.06 },
-    { t: 30,  k1: 25.0,  k1_lo: 24.18, k1_band: 1.64, k2: 28.0,  k2_lo: 22.11, k2_band: 11.78, k4: 34.67,  k4_lo: 27.87, k4_band: 13.6,  k8: 53.33,  k8_lo: 49.56,  k8_band: 7.54  },
-    { t: 45,  k1: 30.0,  k1_lo: 30.0,  k1_band: 0.0,  k2: 35.33, k2_lo: 29.6,  k2_band: 11.46, k4: 44.0,   k4_lo: 37.47, k4_band: 13.06, k8: 72.0,   k8_lo: 65.47,  k8_band: 13.06 },
-    { t: 60,  k1: 34.67, k1_lo: 32.18, k1_band: 4.98, k2: 42.67, k2_lo: 36.07, k2_band: 13.2,  k4: 56.0,   k4_lo: 44.22, k4_band: 23.56, k8: 85.33,  k8_lo: 81.56,  k8_band: 7.54  },
-    { t: 75,  k1: 40.33, k1_lo: 36.93, k1_band: 6.8,  k2: 46.67, k2_lo: 41.68, k2_band: 9.98,  k4: 66.67,  k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56,  k8_band: 7.54  },
-    { t: 90,  k1: 48.67, k1_lo: 45.37, k1_band: 6.6,  k2: 52.67, k2_lo: 47.68, k2_band: 9.98,  k4: 84.0,   k4_lo: 77.47, k4_band: 13.06, k8: 112.0,  k8_lo: 112.0,  k8_band: 0.0   },
-    { t: 105, k1: 56.0,  k1_lo: 52.44, k1_band: 7.12, k2: 64.0,  k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9,  k8_band: 7.54  },
+    { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
+    { t: 15, k1: 17.0, k1_lo: 15.37, k1_band: 3.26, k2: 22.0, k2_lo: 17.68, k2_band: 8.64, k4: 24.0, k4_lo: 18.34, k4_band: 11.32, k8: 40.0, k8_lo: 33.47, k8_band: 13.06 },
+    { t: 30, k1: 25.0, k1_lo: 24.18, k1_band: 1.64, k2: 28.0, k2_lo: 22.11, k2_band: 11.78, k4: 34.67, k4_lo: 27.87, k4_band: 13.6, k8: 53.33, k8_lo: 49.56, k8_band: 7.54 },
+    { t: 45, k1: 30.0, k1_lo: 30.0, k1_band: 0.0, k2: 35.33, k2_lo: 29.6, k2_band: 11.46, k4: 44.0, k4_lo: 37.47, k4_band: 13.06, k8: 72.0, k8_lo: 65.47, k8_band: 13.06 },
+    { t: 60, k1: 34.67, k1_lo: 32.18, k1_band: 4.98, k2: 42.67, k2_lo: 36.07, k2_band: 13.2, k4: 56.0, k4_lo: 44.22, k4_band: 23.56, k8: 85.33, k8_lo: 81.56, k8_band: 7.54 },
+    { t: 75, k1: 40.33, k1_lo: 36.93, k1_band: 6.8, k2: 46.67, k2_lo: 41.68, k2_band: 9.98, k4: 66.67, k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56, k8_band: 7.54 },
+    { t: 90, k1: 48.67, k1_lo: 45.37, k1_band: 6.6, k2: 52.67, k2_lo: 47.68, k2_band: 9.98, k4: 84.0, k4_lo: 77.47, k4_band: 13.06, k8: 112.0, k8_lo: 112.0, k8_band: 0.0 },
+    { t: 105, k1: 56.0, k1_lo: 52.44, k1_band: 7.12, k2: 64.0, k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9, k8_band: 7.54 },
   ];
 
   var CAND_VS_TIME_LINES = [
