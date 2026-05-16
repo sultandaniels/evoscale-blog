@@ -771,77 +771,121 @@
   }
 
   // ---- Visual #5b: candidates-vs-time ----
-  function CandVsTimeEditable() {
-    var rows = [
-      { id: 1, k: 1, candidates: 48.67, time: 90, notes: "Circle packing" },
-      { id: 2, k: 4, candidates: 84, time: 90, notes: "Circle packing" },
-      { id: 3, k: 8, candidates: 112, time: 90, notes: "Circle packing" },
-    ];
+  // Circle-packing benchmark, 3-run mean ± 1σ. Values sourced from
+  // assets/k_sweep_candidates_raw.json (checkpoints_sec indices 0–7).
+  // For each K, lo = mean - std, band = 2 * std (Recharts stacked-area pattern).
+  var CAND_VS_TIME_DATA = [
+    { t: 0,   k1: 0.0,   k1_lo: 0.0,   k1_band: 0.0,  k2: 0.0,   k2_lo: 0.0,   k2_band: 0.0,   k4: 0.0,    k4_lo: 0.0,   k4_band: 0.0,   k8: 0.0,    k8_lo: 0.0,    k8_band: 0.0  },
+    { t: 15,  k1: 17.0,  k1_lo: 15.37, k1_band: 3.26, k2: 22.0,  k2_lo: 17.68, k2_band: 8.64,  k4: 24.0,   k4_lo: 18.34, k4_band: 11.32, k8: 40.0,   k8_lo: 33.47,  k8_band: 13.06 },
+    { t: 30,  k1: 25.0,  k1_lo: 24.18, k1_band: 1.64, k2: 28.0,  k2_lo: 22.11, k2_band: 11.78, k4: 34.67,  k4_lo: 27.87, k4_band: 13.6,  k8: 53.33,  k8_lo: 49.56,  k8_band: 7.54  },
+    { t: 45,  k1: 30.0,  k1_lo: 30.0,  k1_band: 0.0,  k2: 35.33, k2_lo: 29.6,  k2_band: 11.46, k4: 44.0,   k4_lo: 37.47, k4_band: 13.06, k8: 72.0,   k8_lo: 65.47,  k8_band: 13.06 },
+    { t: 60,  k1: 34.67, k1_lo: 32.18, k1_band: 4.98, k2: 42.67, k2_lo: 36.07, k2_band: 13.2,  k4: 56.0,   k4_lo: 44.22, k4_band: 23.56, k8: 85.33,  k8_lo: 81.56,  k8_band: 7.54  },
+    { t: 75,  k1: 40.33, k1_lo: 36.93, k1_band: 6.8,  k2: 46.67, k2_lo: 41.68, k2_band: 9.98,  k4: 66.67,  k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56,  k8_band: 7.54  },
+    { t: 90,  k1: 48.67, k1_lo: 45.37, k1_band: 6.6,  k2: 52.67, k2_lo: 47.68, k2_band: 9.98,  k4: 84.0,   k4_lo: 77.47, k4_band: 13.06, k8: 112.0,  k8_lo: 112.0,  k8_band: 0.0   },
+    { t: 105, k1: 56.0,  k1_lo: 52.44, k1_band: 7.12, k2: 64.0,  k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9,  k8_band: 7.54  },
+  ];
 
-    var palette = ["#888", "#1f9d55", "#003262", "#fdb515", "#9467bd", "#d62728", "#ef6c00", "#5d4037"];
+  var CAND_VS_TIME_LINES = [
+    { key: "k1", lo: "k1_lo", band: "k1_band", label: "K=1", color: "#888" },
+    { key: "k2", lo: "k2_lo", band: "k2_band", label: "K=2", color: "#1f9d55" },
+    { key: "k4", lo: "k4_lo", band: "k4_band", label: "K=4", color: "#003262" },
+    { key: "k8", lo: "k8_lo", band: "k8_band", label: "K=8", color: "#fdb515" },
+  ];
 
-    var times = [];
-    rows.forEach(function (r) {
-      if (r.time > 0 && times.indexOf(r.time) === -1) times.push(r.time);
-    });
-    times.sort(function (a, b) { return a - b; });
-
-    var origin = { t: 0 };
-    rows.forEach(function (r, i) { origin["r" + i] = 0; });
-    var data = [origin];
-    times.forEach(function (t) {
-      var p = { t: t };
-      rows.forEach(function (r, i) {
-        if (r.time === t) p["r" + i] = r.candidates;
-      });
-      data.push(p);
-    });
-
-    var xMax = times.length ? Math.max(10, times[times.length - 1] * 1.05) : 100;
+  function CandVsTimeChart() {
+    function customTooltip(props) {
+      if (!props.active || !props.payload || !props.payload.length) return null;
+      var validNames = { "K=1": 1, "K=2": 1, "K=4": 1, "K=8": 1 };
+      var rows = props.payload.filter(function (p) { return p.name && validNames[p.name]; });
+      if (!rows.length) return null;
+      return html`
+        <div style=${{ fontFamily: "var(--sans)", fontSize: 12, background: "white", border: "1px solid #ddd", padding: "8px 10px", borderRadius: 4 }}>
+          <div style=${{ marginBottom: 4, fontWeight: 600 }}>t = ${props.label} min</div>
+          ${rows.map(function (p) {
+        return html`<div key=${p.dataKey} style=${{ color: p.color, margin: "2px 0" }}>
+              ${p.name}: ${typeof p.value === "number" ? Math.round(p.value) : "n/a"}
+            </div>`;
+      })}
+        </div>`;
+    }
 
     return html`
       <div>
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${CAND_VS_TIME_DATA} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
                 type="number"
-                domain=${[0, xMax]}
+                domain=${[0, 105]}
+                ticks=${[0, 15, 30, 45, 60, 75, 90, 105]}
                 tick=${{ fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" }}
-                label=${{ value: "Wall-clock time (minutes)", position: "insideBottom", offset: -16, style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" } }}
+                label=${{
+        value: "Wall-clock time (minutes)",
+        position: "insideBottom",
+        offset: -16,
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+      }}
               />
               <${YAxis}
                 type="number"
                 domain=${[0, "auto"]}
                 tick=${{ fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" }}
-                label=${{ value: "Candidates generated", angle: -90, position: "insideLeft", offset: 16, style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" } }}
+                label=${{
+        value: "Candidates generated",
+        angle: -90,
+        position: "insideLeft",
+        offset: 16,
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+      }}
               />
-              <${Tooltip} />
+              <${Tooltip} content=${customTooltip} />
               <${Legend} verticalAlign="top" height=${28} content=${renderLegend} />
-              ${rows.map(function (r, i) {
-      return html`
-                  <${Line}
-                    key=${r.id}
-                    type="linear"
-                    dataKey=${"r" + i}
-                    stroke=${palette[i % palette.length]}
-                    strokeWidth=${2.2}
-                    dot=${{ r: 4 }}
-                    name=${"K=" + r.k + (r.notes ? " (" + r.notes + ")" : "")}
-                    connectNulls=${true}
+              ${CAND_VS_TIME_LINES.map(function (l) {
+        return html`
+                  <${Area}
+                    key=${l.key + "_lo"}
+                    type="monotone"
+                    dataKey=${l.lo}
+                    stackId=${l.key}
+                    stroke="none"
+                    fill="transparent"
+                    legendType="none"
                     isAnimationActive=${false}
+                    dot=${false}
+                  />
+                  <${Area}
+                    key=${l.key + "_band"}
+                    type="monotone"
+                    dataKey=${l.band}
+                    stackId=${l.key}
+                    stroke="none"
+                    fill=${l.color}
+                    fillOpacity=${0.18}
+                    legendType="none"
+                    isAnimationActive=${false}
+                    dot=${false}
+                  />
+                  <${Line}
+                    key=${l.key}
+                    type="monotone"
+                    dataKey=${l.key}
+                    stroke=${l.color}
+                    strokeWidth=${2.2}
+                    dot=${{ r: 3 }}
+                    name=${l.label}
+                    isAnimationActive=${true}
                   />
                 `;
-    })}
+      })}
             <//>
           <//>
         </div>
         <div className="chart-readout">
-          Each line runs from (0, 0) to that row's (time, candidates) endpoint;
-          the slope is throughput. K=1, K=4, and K=8 are circle-packing
-          measurements (3-run means) at t=90 min.
+          Cumulative candidates generated on the circle-packing benchmark, mean ±1σ
+          over 3 runs. Higher K generates more candidates per wall-clock minute
+          until saturation around 90 min.
         </div>
       </div>
     `;
@@ -890,9 +934,9 @@
 
   try {
     var cvtRoot = document.getElementById("cand-vs-time-root");
-    if (cvtRoot) createRoot(cvtRoot).render(createElement(CandVsTimeEditable));
+    if (cvtRoot) createRoot(cvtRoot).render(createElement(CandVsTimeChart));
   } catch (err) {
-    console.error("CandVsTimeEditable mount failed:", err);
+    console.error("CandVsTimeChart mount failed:", err);
     showError("cand-vs-time-root", "Widget failed to mount: " + err.message);
   }
 })();
