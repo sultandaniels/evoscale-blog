@@ -901,7 +901,7 @@
       study of a pattern we expect is general.
     </p>
 
-    <h3>Speculative pipelining (the part that needs further improvement)</h3>
+    <h3>Speculative pipelining</h3>
 
     <p>
       While the LLM is generating K candidates, the evaluator sits idle. While the evaluator is scoring them, the LLM
@@ -961,11 +961,6 @@
       </div>
     </div>
 
-    <p>
-      This is an unflattering result and we are reporting it on purpose. Systems wins and search wins are not
-      automatically the same thing, and a 1.6× speedup that costs you the answer is not a speedup.
-    </p>
-
     <div class="divider">* * *</div>
 
     <!-- ============================== SECTION 6 ============================== -->
@@ -984,16 +979,10 @@
     </p>
 
     <p>
-      The exploration-versus-exploitation tradeoff isn't unique to evolutionary search either. Any iterative process
-      that calls an LLM in a loop faces some version of "batch from the same node or expand to new nodes."
-      Self-consistency sampling, ReAct agents, tree-of-thought search: same shape, different costume.
-    </p>
-
-    <p>
       One small bonus we didn't plan for: K-batched generation produces exactly the (prompt, K responses, reward) tuples
       that <a href="https://arxiv.org/abs/2402.03300">GRPO</a> (Feb 2024) uses for reinforcement-learning training. The
-      batching that started as a caching trick is also a training-data collection mechanism. We didn't run a GRPO loop
-      in the paper, but the data shape lines up cleanly, and that feels like an opening.
+      batching that started as a caching trick is also a training-data collection mechanism. We didn't run a GRPO loop,
+      but the data shape lines up cleanly, and can be easily ported for future work.
     </p>
 
     <div class="divider">* * *</div>
@@ -1001,8 +990,6 @@
     <!-- ============================== SECTION 7 ============================== -->
 
     <h2>What's next</h2>
-
-    <p>A short list of things we'd like to chase, in roughly increasing order of ambition:</p>
 
     <ul>
       <li><strong>Adaptive K.</strong> The optimal K isn't constant. Early in search you want exploration; late in
@@ -1019,7 +1006,7 @@
       <li><strong>Persistent KV cache.</strong> Tools like <a href="https://github.com/LMCache/LMCache">LMCache</a>
         (Oct 2025) let cached blocks survive request boundaries and even server restarts. Persistent KV plus batching
         could push hit rates closer to the theoretical ceiling.</li>
-      <li><strong>Multi-GPU.</strong> We used one H100 out of eight. Disaggregated prefill and decode (DistServe,
+      <li><strong>Multi-GPU.</strong> We used one H100. Disaggregated prefill and decode (DistServe,
         Splitwise, Mooncake) opens another axis to exploit.</li>
       <li><strong>Online policy improvement.</strong> Feed the (prompt, K responses, reward) tuples into a GRPO loop.
         The system gets faster <em>and</em> the model gets better as it searches.</li>
@@ -1036,7 +1023,7 @@
     <p>
       Discovery is iteration. Iteration is bottlenecked by how fast you can try the next thing. Whether to try the same
       thing eight ways or eight different things once is a choice every researcher makes, usually without thinking about
-      it. It turns out the LLM serving stack rewards one of those choices much more than the other.
+      it.
     </p>
 
     <p>

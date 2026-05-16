@@ -771,19 +771,32 @@
   }
 
   // ---- Visual #5b: candidates-vs-time ----
-  // Circle-packing benchmark, 3-run mean ± 1σ. Values sourced from
-  // assets/k_sweep_candidates_raw.json (checkpoints_sec indices 0–7).
+  // Values sourced from assets/k_sweep_candidates_raw.json (checkpoints_sec
+  // indices 0–7). Runs with trailing nulls are forward-filled with each run's
+  // last observed value, matching ResultsChart's treatment of incomplete runs.
   // For each K, lo = mean - std, band = 2 * std (Recharts stacked-area pattern).
-  var CAND_VS_TIME_DATA = [
-    { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
-    { t: 15, k1: 17.0, k1_lo: 15.37, k1_band: 3.26, k2: 22.0, k2_lo: 17.68, k2_band: 8.64, k4: 24.0, k4_lo: 18.34, k4_band: 11.32, k8: 40.0, k8_lo: 33.47, k8_band: 13.06 },
-    { t: 30, k1: 25.0, k1_lo: 24.18, k1_band: 1.64, k2: 28.0, k2_lo: 22.11, k2_band: 11.78, k4: 34.67, k4_lo: 27.87, k4_band: 13.6, k8: 53.33, k8_lo: 49.56, k8_band: 7.54 },
-    { t: 45, k1: 30.0, k1_lo: 30.0, k1_band: 0.0, k2: 35.33, k2_lo: 29.6, k2_band: 11.46, k4: 44.0, k4_lo: 37.47, k4_band: 13.06, k8: 72.0, k8_lo: 65.47, k8_band: 13.06 },
-    { t: 60, k1: 34.67, k1_lo: 32.18, k1_band: 4.98, k2: 42.67, k2_lo: 36.07, k2_band: 13.2, k4: 56.0, k4_lo: 44.22, k4_band: 23.56, k8: 85.33, k8_lo: 81.56, k8_band: 7.54 },
-    { t: 75, k1: 40.33, k1_lo: 36.93, k1_band: 6.8, k2: 46.67, k2_lo: 41.68, k2_band: 9.98, k4: 66.67, k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56, k8_band: 7.54 },
-    { t: 90, k1: 48.67, k1_lo: 45.37, k1_band: 6.6, k2: 52.67, k2_lo: 47.68, k2_band: 9.98, k4: 84.0, k4_lo: 77.47, k4_band: 13.06, k8: 112.0, k8_lo: 112.0, k8_band: 0.0 },
-    { t: 105, k1: 56.0, k1_lo: 52.44, k1_band: 7.12, k2: 64.0, k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9, k8_band: 7.54 },
-  ];
+  var CAND_VS_TIME_DATA = {
+    "Circle Packing": [
+      { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
+      { t: 15, k1: 17.0, k1_lo: 15.37, k1_band: 3.26, k2: 22.0, k2_lo: 17.68, k2_band: 8.64, k4: 24.0, k4_lo: 18.34, k4_band: 11.32, k8: 40.0, k8_lo: 33.47, k8_band: 13.06 },
+      { t: 30, k1: 25.0, k1_lo: 24.18, k1_band: 1.64, k2: 28.0, k2_lo: 22.11, k2_band: 11.78, k4: 34.67, k4_lo: 27.87, k4_band: 13.6, k8: 53.33, k8_lo: 49.56, k8_band: 7.54 },
+      { t: 45, k1: 30.0, k1_lo: 30.0, k1_band: 0.0, k2: 35.33, k2_lo: 29.6, k2_band: 11.46, k4: 44.0, k4_lo: 37.47, k4_band: 13.06, k8: 72.0, k8_lo: 65.47, k8_band: 13.06 },
+      { t: 60, k1: 34.67, k1_lo: 32.18, k1_band: 4.98, k2: 42.67, k2_lo: 36.07, k2_band: 13.2, k4: 56.0, k4_lo: 44.22, k4_band: 23.56, k8: 85.33, k8_lo: 81.56, k8_band: 7.54 },
+      { t: 75, k1: 40.33, k1_lo: 36.93, k1_band: 6.8, k2: 46.67, k2_lo: 41.68, k2_band: 9.98, k4: 66.67, k4_lo: 57.24, k4_band: 18.86, k8: 101.33, k8_lo: 97.56, k8_band: 7.54 },
+      { t: 90, k1: 48.67, k1_lo: 45.37, k1_band: 6.6, k2: 52.67, k2_lo: 47.68, k2_band: 9.98, k4: 84.0, k4_lo: 77.47, k4_band: 13.06, k8: 112.0, k8_lo: 112.0, k8_band: 0.0 },
+      { t: 105, k1: 56.0, k1_lo: 52.44, k1_band: 7.12, k2: 64.0, k2_lo: 56.52, k2_band: 14.96, k4: 109.33, k4_lo: 86.16, k4_band: 46.34, k8: 130.67, k8_lo: 126.9, k8_band: 7.54 },
+    ],
+    "Signal Processing": [
+      { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
+      { t: 15, k1: 19.67, k1_lo: 18.42, k1_band: 2.5, k2: 34.0, k2_lo: 31.17, k2_band: 5.66, k4: 57.33, k4_lo: 55.44, k4_band: 3.78, k8: 104.0, k8_lo: 104.0, k8_band: 0.0 },
+      { t: 30, k1: 39.33, k1_lo: 34.14, k1_band: 10.38, k2: 61.33, k2_lo: 54.73, k2_band: 13.2, k4: 109.33, k4_lo: 104.34, k4_band: 9.98, k8: 226.67, k8_lo: 176.78, k8_band: 99.78 },
+      { t: 45, k1: 76.0, k1_lo: 52.15, k1_band: 47.7, k2: 90.67, k2_lo: 81.68, k2_band: 17.98, k4: 181.33, k4_lo: 151.16, k4_band: 60.34, k8: 461.33, k8_lo: 297.99, k8_band: 326.68 },
+      { t: 60, k1: 115.0, k1_lo: 73.96, k1_band: 82.08, k2: 114.67, k2_lo: 99.59, k2_band: 30.16, k4: 272.0, k4_lo: 187.15, k4_band: 169.7, k8: 696.0, k8_lo: 446.76, k8_band: 498.48 },
+      { t: 75, k1: 150.0, k1_lo: 102.42, k1_band: 95.16, k2: 144.0, k2_lo: 128.42, k2_band: 31.16, k4: 357.33, k4_lo: 214.02, k4_band: 286.62, k8: 952.0, k8_lo: 589.9, k8_band: 724.2 },
+      { t: 90, k1: 165.67, k1_lo: 120.6, k1_band: 90.14, k2: 173.33, k2_lo: 152.27, k2_band: 42.12, k4: 446.67, k4_lo: 247.68, k4_band: 397.98, k8: 1205.33, k8_lo: 726.34, k8_band: 957.98 },
+      { t: 105, k1: 171.0, k1_lo: 133.47, k1_band: 75.06, k2: 196.67, k2_lo: 173.73, k2_band: 45.88, k4: 509.33, k4_lo: 303.77, k4_band: 411.12, k8: 1242.67, k8_lo: 816.47, k8_band: 852.4 },
+    ],
+  };
 
   var CAND_VS_TIME_LINES = [
     { key: "k1", lo: "k1_lo", band: "k1_band", label: "K=1", color: "#888" },
@@ -793,6 +806,14 @@
   ];
 
   function CandVsTimeChart() {
+    var s = useState("Circle Packing");
+    var bench = s[0], setBench = s[1];
+    var data = CAND_VS_TIME_DATA[bench];
+    var isCP = bench === "Circle Packing";
+    var readout = isCP
+      ? "Cumulative candidates generated on the circle-packing benchmark, mean ±1σ over 3 runs. Higher K generates more candidates per wall-clock minute until saturation around 90 min."
+      : "Cumulative candidates generated on the signal-processing benchmark, mean ±1σ over 3 runs. K=8 produces roughly 7× more candidates than K=1 by t=90 min; wide bands reflect high seed-to-seed variance, with some runs forward-filled after their final checkpoint.";
+
     function customTooltip(props) {
       if (!props.active || !props.payload || !props.payload.length) return null;
       var validNames = { "K=1": 1, "K=2": 1, "K=4": 1, "K=8": 1 };
@@ -811,9 +832,21 @@
 
     return html`
       <div>
+        <div className="toggle-row">
+          ${Object.keys(CAND_VS_TIME_DATA).map(function (name) {
+      return html`
+              <button
+                key=${name}
+                className=${name === bench ? "active" : ""}
+                onClick=${function () { setBench(name); }}
+              >${name}</button>
+            `;
+    })}
+        </div>
+
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${CAND_VS_TIME_DATA} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
@@ -882,11 +915,7 @@
             <//>
           <//>
         </div>
-        <div className="chart-readout">
-          Cumulative candidates generated on the circle-packing benchmark, mean ±1σ
-          over 3 runs. Higher K generates more candidates per wall-clock minute
-          until saturation around 90 min.
-        </div>
+        <div className="chart-readout">${readout}</div>
       </div>
     `;
   }
