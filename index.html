@@ -704,9 +704,10 @@
         </div>
         <img src="assets/kv_cache_plot_final.png" alt="Prompt structure and KV cache hit rate over iterations" />
       </div>
-      <figcaption>Top: Prompt-layout diagram. Bottom: the
-        anatomy of one search prompt and the measured cache hit rate, iteration by iteration, on a vanilla controller.
-        Cache gets warmed, cache gets evicted. The pattern repeats forever.</figcaption>
+      <figcaption>Top: Prompt-layout diagram. Bottom: The measured KV cache hit rate, iteration by iteration, on a
+        vanilla controller.
+        Cache gets warmed when the same parent program is used for generation. It immediately gets evicted when the
+        parent program switches.</figcaption>
     </figure>
 
     <p>
@@ -725,13 +726,14 @@
     <h2>What you pay vs. what the GPU actually does</h2>
 
     <p>
-      Pricing is starting to split along workload axes, but slowly.
+      Pricing is starting to split along workload axes.
     </p>
 
     <p>
-      On the OpenAI side, cached input tokens are billed at roughly 10% of uncached input (e.g. GPT-5.2 at ~$1.75/M
-      uncached vs. ~$0.175/M cached, <a href="https://openai.com/api/pricing/">OpenAI</a>, May 2026). Batch and Flex
-      tiers give a flat 50% discount in exchange for relaxed latency (<a
+      On the OpenAI side, cached input tokens are billed at roughly 10% of uncached input (e.g. GPT-5.5 at ~$5.00/1M
+      tokens
+      uncached vs. ~$0.50/1M tokens cached, <a href="https://openai.com/api/pricing/">OpenAI</a>, May 2026). The batch
+      tier give a flat 50% discount in exchange for relaxed latency (<a
         href="https://developers.openai.com/cookbook/examples/prompt_caching_201">OpenAI prompt caching cookbook</a>,
       Feb 2026). Anthropic's API works similarly: cache reads are 10% of the standard input price, batch is 50% off (<a
         href="https://www.anthropic.com/pricing">Anthropic pricing</a>, May 2026).
@@ -742,16 +744,12 @@
       Interactive terminal use is billed against a flat-rate Pro or Max subscription, while automated pipelines on the
       same model are billed per-token through the API (<a href="https://www.anthropic.com/claude-code">Claude Code
         pricing</a>, Apr 2026). The split is a rough proxy for the underlying GPU behavior: an interactive session
-      reuses the same context across turns and gets near-perfect cache hits, while one-shot API calls in CI/CD do not.
+      reuses the same context across turns and gets near-perfect cache hits, while one-shot API calls do not.
       The pricing is starting to track the systems reality, but only crudely.
-    </p>
-
-    <p>
-      The bigger gap is that none of these tiers price <em>what kind of loop you are running</em>. An evolutionary
-      search loop, an agent loop, a self-consistency sampler, and a one-shot completion all hit the same. As
+      As
       systems-level optimizations improve, pricing will likely fragment further: discounts for prompts the provider can
       confirm are amenable to prefix reuse, surcharges for cache-hostile patterns, and probably a per-iteration credit
-      for batched-decode workloads. Open or closed, the GPU does what it does; the bill is just downstream of that.
+      for batched-decode workloads.
     </p>
 
     <div class="divider">* * *</div>
