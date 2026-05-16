@@ -268,7 +268,7 @@
 
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 12, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
@@ -293,7 +293,7 @@
         angle: -90,
         position: "insideLeft",
         offset: 0,
-        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)", textAnchor: "middle" },
       }}
               />
               <${Tooltip} content=${customTooltip} />
@@ -392,7 +392,7 @@
       <div>
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${SPEC_CAND_DATA} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${SPEC_CAND_DATA} margin=${{ top: 10, right: 16, left: 12, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
@@ -415,8 +415,8 @@
         value: "Candidates generated",
         angle: -90,
         position: "insideLeft",
-        offset: 16,
-        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+        offset: 0,
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)", textAnchor: "middle" },
       }}
               />
               <${Tooltip} content=${customTooltip} />
@@ -561,7 +561,7 @@
 
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 12, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
@@ -585,8 +585,8 @@
         value: "Best score",
         angle: -90,
         position: "insideLeft",
-        offset: 16,
-        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+        offset: 0,
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)", textAnchor: "middle" },
       }}
               />
               <${Tooltip} content=${customTooltip} />
@@ -710,7 +710,7 @@
         </div>
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 12, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="i"
@@ -722,7 +722,7 @@
               <${YAxis}
                 type="number"
                 tick=${{ fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" }}
-                label=${{ value: "LLM gen time (s)", angle: -90, position: "insideLeft", offset: 16, style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" } }}
+                label=${{ value: "LLM gen time (s)", angle: -90, position: "insideLeft", offset: 0, style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)", textAnchor: "middle" } }}
               />
               <${Tooltip} content=${customTooltip} />
               <${Legend}
@@ -846,7 +846,7 @@
 
         <div className="chart-wrap">
           <${ResponsiveContainer} width="100%" height="100%">
-            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 0, bottom: 28 }}>
+            <${ComposedChart} data=${data} margin=${{ top: 10, right: 16, left: 12, bottom: 28 }}>
               <${CartesianGrid} strokeDasharray="3 3" stroke="#eee" />
               <${XAxis}
                 dataKey="t"
@@ -869,8 +869,8 @@
         value: "Candidates generated",
         angle: -90,
         position: "insideLeft",
-        offset: 16,
-        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)" },
+        offset: 0,
+        style: { fontSize: 12, fill: "#504f4f", fontFamily: "var(--sans)", textAnchor: "middle" },
       }}
               />
               <${Tooltip} content=${customTooltip} />
