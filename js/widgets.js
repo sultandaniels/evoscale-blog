@@ -774,11 +774,9 @@
   }
 
   // ---- Visual #5b: candidates-vs-time ----
-  // Mean and std taken directly from assets/k_sweep_candidates_raw.json
-  // (circle_packing / signal_processing, all 9 checkpoints_sec entries).
+  // Mean and std taken directly from k_sweep_counts_data.json
+  // (data[benchmark][K], all 9 checkpoints_seconds entries).
   // For each K, lo = mean - std, band = 2 * std (Recharts stacked-area pattern).
-  // Where the JSON mean/std is null (k8 signal_processing at t=120), the field
-  // is null so Recharts renders a gap.
   var CAND_VS_TIME_DATA = {
     "Circle Packing": [
       { t: 0, k1: 0.0, k1_lo: 0.0, k1_band: 0.0, k2: 0.0, k2_lo: 0.0, k2_band: 0.0, k4: 0.0, k4_lo: 0.0, k4_band: 0.0, k8: 0.0, k8_lo: 0.0, k8_band: 0.0 },
@@ -798,9 +796,9 @@
       { t: 45, k1: 76.0, k1_lo: 52.15, k1_band: 47.7, k2: 90.67, k2_lo: 81.68, k2_band: 17.98, k4: 181.33, k4_lo: 151.16, k4_band: 60.34, k8: 461.33, k8_lo: 297.99, k8_band: 326.68 },
       { t: 60, k1: 115.0, k1_lo: 73.96, k1_band: 82.08, k2: 114.67, k2_lo: 99.59, k2_band: 30.16, k4: 272.0, k4_lo: 187.15, k4_band: 169.7, k8: 696.0, k8_lo: 446.76, k8_band: 498.48 },
       { t: 75, k1: 150.0, k1_lo: 102.42, k1_band: 95.16, k2: 144.0, k2_lo: 128.42, k2_band: 31.16, k4: 357.33, k4_lo: 214.02, k4_band: 286.62, k8: 952.0, k8_lo: 589.9, k8_band: 724.2 },
-      { t: 90, k1: 148.5, k1_lo: 102.0, k1_band: 93.0, k2: 173.33, k2_lo: 152.27, k2_band: 42.12, k4: 446.67, k4_lo: 247.68, k4_band: 397.98, k8: 1205.33, k8_lo: 726.34, k8_band: 957.98 },
-      { t: 105, k1: 118.0, k1_lo: 118.0, k1_band: 0.0, k2: 196.67, k2_lo: 173.73, k2_band: 45.88, k4: 509.33, k4_lo: 303.77, k4_band: 411.12, k8: 640.0, k8_lo: 640.0, k8_band: 0.0 },
-      { t: 120, k1: 138.0, k1_lo: 138.0, k1_band: 0.0, k2: 226.67, k2_lo: 202.1, k2_band: 49.14, k4: 416.0, k4_lo: 412.0, k4_band: 8.0, k8: null, k8_lo: null, k8_band: null },
+      { t: 90, k1: 165.67, k1_lo: 120.6, k1_band: 90.14, k2: 173.33, k2_lo: 152.27, k2_band: 42.12, k4: 446.67, k4_lo: 247.68, k4_band: 397.98, k8: 1205.33, k8_lo: 726.34, k8_band: 957.98 },
+      { t: 105, k1: 172.67, k1_lo: 134.01, k1_band: 77.32, k2: 196.67, k2_lo: 173.73, k2_band: 45.88, k4: 509.33, k4_lo: 303.77, k4_band: 411.12, k8: 1280.0, k8_lo: 827.45, k8_band: 905.1 },
+      { t: 120, k1: 179.33, k1_lo: 150.1, k1_band: 58.46, k2: 226.67, k2_lo: 202.1, k2_band: 49.14, k4: 544.0, k4_lo: 362.95, k4_band: 362.1, k8: 1280.0, k8_lo: 827.45, k8_band: 905.1 },
     ],
   };
 
@@ -818,7 +816,7 @@
     var isCP = bench === "Circle Packing";
     var readout = isCP
       ? "Cumulative candidates generated on the circle-packing benchmark, mean ±1σ over 3 runs. Higher K generates more candidates per wall-clock minute until saturation around 90 min."
-      : "Cumulative candidates generated on the signal-processing benchmark, mean ±1σ over 3 runs. K=8 produces roughly 7× more candidates than K=1 by t=90 min; wide bands reflect high seed-to-seed variance, and means past t=75 average over only the runs still reporting at each checkpoint.";
+      : "Cumulative candidates generated on the signal-processing benchmark, mean ±1σ over 3 runs. K=8 produces roughly 7× more candidates than K=1 by t=90 min; wide bands at higher K reflect high seed-to-seed variance.";
 
     function customTooltip(props) {
       if (!props.active || !props.payload || !props.payload.length) return null;
