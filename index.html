@@ -478,6 +478,7 @@
         href="https://arxiv.org/abs/2602.20133">AdaEvolve</a> (Cemri et al., Feb 2026), <a
         href="https://arxiv.org/abs/2510.14150">CodeEvolve</a> (Mar 2026), <a
         href="https://huggingface.co/blog/codelion/openevolve">OpenEvolve</a> (May 2025), <a
+        href="https://arxiv.org/abs/2601.16175">TTT-Discovere</a> (Jan 2026), <a
         href="https://arxiv.org/abs/2604.01658v1">CORAL</a> (Apr 2026), <a
         href="https://arxiv.org/abs/2602.13769">OR-Agent</a> (Feb 2026), and <a
         href="https://arxiv.org/abs/2604.24372">SeaEvo</a> (Apr 2026) have all extended the FunSearch/AlphaEvolve recipe
@@ -760,7 +761,7 @@
 
     <p>
       <strong>Discovery itself is the prize.</strong> AlphaEvolve (May 2025) rediscovered a 56-year-old matrix
-      multiplication result and improved on it. FunSearch (Dec 2023) produced new mathematical constructions. These
+      multiplication result and improved on it. These
       systems are already producing real scientific output. Anything that makes them faster makes more discoveries
       reachable.
     </p>
@@ -769,7 +770,7 @@
       <strong>Open weights let us measure what we otherwise could not see.</strong> Systems-level optimizations like
       prompt-shape-aware batching benefit closed providers too; they are just hidden inside the API. The reason we ran
       this experiment on Qwen3 + vLLM was not that the trick only works on open models, but that owning the stack let us
-      instrument cache hit rate end-to-end and tune the prompt cadence against it. The lesson generalizes to anyone
+      measure cache hit rate end-to-end and tune the prompt cadence against it. The lesson generalizes to anyone
       running a structured LLM workload, whether the model weights are public or not.
     </p>
 
@@ -831,7 +832,7 @@
     </p>
 
     <p>
-      One detail worth surfacing: how much K helps depends on how long the LLM's <em>output</em> is. On the
+      One detail worth surfacing: how much a higher K helps depends on how long the LLM's <em>output</em> is. On a
       circle-packing benchmark, generated solutions average around 1,500 output tokens and range from roughly 800 to
       2,200. Decode time scales with output length, so when generations are long, batching K parallel decodes off the
       same cached prefix produces large absolute time savings. When generations are short (a few hundred tokens), most
