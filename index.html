@@ -491,7 +491,8 @@
 
     <p>
       In our recent course project we measured this in the simplest way we could think of: cache hit rate. On a vanilla
-      <a href="https://arxiv.org/abs/2602.20133">AdaEvolve</a> (Feb 2026)-style setup serving Qwen3-4B with vLLM, only
+      <a href="https://arxiv.org/abs/2602.20133">AdaEvolve</a> (Feb 2026)-style setup serving Qwen3.5-27B-FP8 with vLLM,
+      only
       <strong>18.4%</strong> of the prompt tokens we sent ever hit the prefix cache.
     </p>
 
@@ -850,7 +851,7 @@
     <h3>Does the tradeoff pay off?</h3>
 
     <p>
-      The headline numbers, all measured on one H100 80GB running Qwen3-4B with vLLM 0.15.1:
+      The headline numbers, all measured on one H100 80GB running Qwen3.5-27B-FP8 with vLLM 0.19.1:
     </p>
 
     <ul>
