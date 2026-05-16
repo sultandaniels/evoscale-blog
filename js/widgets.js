@@ -185,6 +185,7 @@
   // so the mean never drops due to a high-scoring run finishing early.
   var CHART_DATA = {
     "Circle Packing": [
+      { t: 0, k1: 0, k1_lo: 0, k1_band: 0, k2: 0, k2_lo: 0, k2_band: 0, k4: 0, k4_lo: 0, k4_band: 0, k8: 0, k8_lo: 0, k8_band: 0 },
       { t: 15, k1: 0.9155, k1_lo: 0.8541, k1_band: 0.1228, k2: 0.7961, k2_lo: 0.6120, k2_band: 0.3683, k4: 0.9431, k4_lo: 0.8742, k4_band: 0.1258, k8: 0.9501, k8_lo: 0.8918, k8_band: 0.1082 },
       { t: 30, k1: 0.9892, k1_lo: 0.9806, k1_band: 0.0172, k2: 0.8155, k2_lo: 0.6222, k2_band: 0.3778, k4: 0.9809, k4_lo: 0.9650, k4_band: 0.0319, k8: 0.9934, k8_lo: 0.9893, k8_band: 0.0083 },
       { t: 45, k1: 0.9893, k1_lo: 0.9807, k1_band: 0.0172, k2: 0.9010, k2_lo: 0.7882, k2_band: 0.2118, k4: 0.9814, k4_lo: 0.9651, k4_band: 0.0325, k8: 0.9954, k8_lo: 0.9941, k8_band: 0.0027 },
@@ -193,6 +194,7 @@
       { t: 90, k1: 0.9947, k1_lo: 0.9932, k1_band: 0.0031, k2: 0.9859, k2_lo: 0.9780, k2_band: 0.0159, k4: 0.9957, k4_lo: 0.9937, k4_band: 0.0040, k8: 0.9960, k8_lo: 0.9954, k8_band: 0.0012 },
     ],
     "Signal Processing": [
+      { t: 0, k1: 0, k1_lo: 0, k1_band: 0, k2: 0, k2_lo: 0, k2_band: 0, k4: 0, k4_lo: 0, k4_band: 0, k8: 0, k8_lo: 0, k8_band: 0 },
       { t: 15, k1: 0.5237, k1_lo: 0.4888, k1_band: 0.0697, k2: 0.5540, k2_lo: 0.4992, k2_band: 0.1096, k4: 0.5567, k4_lo: 0.5175, k4_band: 0.0783, k8: 0.6178, k8_lo: 0.5505, k8_band: 0.1346 },
       { t: 30, k1: 0.5896, k1_lo: 0.5436, k1_band: 0.0921, k2: 0.5540, k2_lo: 0.4992, k2_band: 0.1096, k4: 0.6022, k4_lo: 0.5955, k4_band: 0.0134, k8: 0.6505, k8_lo: 0.6004, k8_band: 0.1001 },
       { t: 45, k1: 0.5902, k1_lo: 0.5444, k1_band: 0.0915, k2: 0.5638, k2_lo: 0.4972, k2_band: 0.1332, k4: 0.6198, k4_lo: 0.5947, k4_band: 0.0503, k8: 0.6607, k8_lo: 0.6054, k8_band: 0.1106 },
@@ -215,6 +217,7 @@
     var vals = [];
     lines.forEach(function (l) {
       data.forEach(function (d) {
+        if (d.t === 0) return;
         var v = d[l.key];
         if (v != null && isFinite(v)) vals.push(v);
       });
